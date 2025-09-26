@@ -12,7 +12,7 @@ public abstract class Domain {
     public record Meeting(
             String context,
             String objective,
-            @JsonPropertyDescription("A list of participant email addresses or however else we identify them")
+            @JsonPropertyDescription("A list of participant email addresses or however else we identify them, e.g. 'Roger Daltrey The Who' or 'roger@who.com'")
             List<String> participants
     ) {
 

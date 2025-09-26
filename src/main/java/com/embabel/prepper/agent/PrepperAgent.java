@@ -25,6 +25,7 @@ public record PrepperAgent(
     public Domain.Participants researchParticipants(Domain.Meeting meeting, OperationContext embabel) {
         var researcher = config.researcher()
                 .promptRunner(embabel)
+                .withTools("linked-in")
                 .creating(Domain.ResearchedParticipant.class);
         var participants = embabel.parallelMap(
                 meeting.participants(),

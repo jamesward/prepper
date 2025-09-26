@@ -1,5 +1,14 @@
 embabel:
 
+  agent:
+    platform:
+      tools:
+        includes:
+          linked-in:
+            tools:
+              - get_person_profile
+              - get_company_profile
+
   models:
     llms:
       best: gpt-4.1
