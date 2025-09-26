@@ -2,6 +2,7 @@ package com.embabel.prepper.shell;
 
 import com.embabel.agent.api.common.autonomy.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
+import com.embabel.agent.core.ProcessOptions;
 import com.embabel.prepper.agent.Domain;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
@@ -19,10 +20,11 @@ record PrepperShell(AgentPlatform agentPlatform) {
                 List.of(
                         "bob.smith@example.com")
         );
-        var briefing = AgentInvocation
-                .create(agentPlatform, Domain.Briefing.class)
+        var briefing = AgentInvocation.builder(agentPlatform)
+                .options(ProcessOptions.builder().verbosity(v -> v.showPrompts(true)).build())
+                .build(Domain.Briefing.class)
                 .invoke(meeting);
-        return briefing.summary();
+        return briefing.briefing();
     }
 
 }

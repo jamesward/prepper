@@ -17,6 +17,7 @@ package com.embabel.prepper;
 
 import com.embabel.agent.config.annotation.EnableAgents;
 import com.embabel.agent.config.annotation.LoggingThemes;
+import com.embabel.agent.config.annotation.McpServers;
 import com.embabel.prepper.agent.PrepperConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,7 +27,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @SpringBootApplication
 @EnableConfigurationProperties(PrepperConfig.class)
 @EnableAgents(
-        loggingTheme = LoggingThemes.SEVERANCE
+        loggingTheme = LoggingThemes.SEVERANCE,
+        mcpServers = {McpServers.DOCKER_DESKTOP}
 )
 class PrepperApplication {
     public static void main(String[] args) {
