@@ -2,9 +2,15 @@ package com.embabel.prepper.agent;
 
 import com.embabel.common.ai.prompt.PromptContributor;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public abstract class Domain {
@@ -22,32 +28,105 @@ public abstract class Domain {
         }
     }
 
+    public record NewContact(
+            String name,
+            @Nullable String email,
+            String writeup
+    ) {
+    }
+
     /**
      * Fleshed out participant
-     *
-     * @param email
-     * @param writeup
      */
-    public record ResearchedParticipant(
-            String email,
-            String writeup) implements PromptContributor {
+    @Entity
+    @EntityListeners(AuditingEntityListener.class)
+    public static class Contact implements PromptContributor {
+
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
+
+        @Column(nullable = false)
+        private String name;
+
+        @Column
+        private String email;
+
+        @Column(columnDefinition = "TEXT")
+        private String writeup;
+
+        @CreatedDate
+        private LocalDateTime createdAt;
+
+        @LastModifiedDate
+        private LocalDateTime updatedAt;
+
+        protected Contact() {
+        }
+
+        public Contact(NewContact newContact) {
+            this.name = newContact.name;
+            this.email = newContact.email;
+            this.writeup = newContact.writeup;
+        }
 
         @NotNull
         @Override
         public String contribution() {
             return "- %s: %s".formatted(email, writeup);
         }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getWriteup() {
+            return writeup;
+        }
+
+        public void setWriteup(String writeup) {
+            this.writeup = writeup;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String email() {
+            return email;
+        }
+
+        public String writeup() {
+            return writeup;
+        }
+
+        @Override
+        public String toString() {
+            return "Contact{id=%d, name='%s', email='%s', writeup:\n%s}".formatted(id, name, email, writeup);
+        }
     }
 
     public record Participants(
-            List<ResearchedParticipant> participants
+            List<Contact> participants
     ) implements PromptContributor {
 
         @NotNull
         @Override
         public String contribution() {
             return participants.stream()
-                    .map(ResearchedParticipant::contribution)
+                    .map(Contact::contribution)
                     .collect(java.util.stream.Collectors.joining("\n"));
         }
     }

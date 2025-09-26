@@ -1,3 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:h2:file:./data/prepper;AUTO_SERVER=true
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
 embabel:
 
   agent:
@@ -21,9 +39,12 @@ prepper:
       role: best
     tool-groups:
       - web
+      - linked-in
     persona:
       role: Research Specialist
-      goal: Conduct thorough research on people and companies involved in the meeting
+      goal: >
+        Conduct thorough research on people and companies involved in the meeting.
+        Use LinkedIn get_person_profile and get_company_profile tools as well as web tools to perform your research
       backstory: >
         As a Research Specialist, your mission is to uncover detailed information
         about the individuals and entities participating in the meeting. Your insights

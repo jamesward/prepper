@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 
 @Agent(description = "A meeting prepper agent that helps users prepare for meetings ")
 public record PrepperAgent(
-        PrepperConfig config
+        PrepperConfig config,
+        ContactService contactService
 ) {
 
     private final static Logger logger = LoggerFactory.getLogger(PrepperAgent.class);
@@ -25,22 +26,28 @@ public record PrepperAgent(
     public Domain.Participants researchParticipants(Domain.Meeting meeting, OperationContext embabel) {
         var researcher = config.researcher()
                 .promptRunner(embabel)
-                .withTools("linked-in")
-                .creating(Domain.ResearchedParticipant.class);
-        var participants = embabel.parallelMap(
+                .creating(Domain.NewContact.class);
+        var contacts = embabel.parallelMap(
                 meeting.participants(),
                 config.maxConcurrency(),
-                participant -> researcher.fromPrompt("""
-                        Conduct comprehensive research on this individual and company
-                        involved in the upcoming meeting. Gather information on recent
-                        news, achievements, professional background, and any relevant
-                        business activities.
-                        
-                        Participant: %s
-                        %s
-                        """.formatted(participant, meeting.purpose())
-                ));
-        return new Domain.Participants(participants);
+                participant ->
+                        contactService.resolveContact(participant)
+                                .orElseGet(() -> {
+                                    var newContact = researcher.fromPrompt("""
+                                            Conduct comprehensive research on this individual and company
+                                            involved in the upcoming meeting. Gather information on recent
+                                            news, achievements, professional background, and any relevant
+                                            business activities.
+                                            
+                                            Do your best to populate email address.
+                                            
+                                            Participant: %s
+                                            %s
+                                            """.formatted(participant, meeting.purpose()));
+                                    return contactService.createContact(newContact);
+                                })
+        );
+        return new Domain.Participants(contacts);
     }
 
     @Action
