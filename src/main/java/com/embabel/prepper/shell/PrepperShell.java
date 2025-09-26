@@ -15,10 +15,14 @@ record PrepperShell(AgentPlatform agentPlatform) {
     @ShellMethod("prep")
     String prep() {
         var meeting = new Domain.Meeting(
-                "Project Kickoff for New Website",
-                "Define project scope, timelines, and assign roles",
+                "Initial discussion about Embabel and Tanzu Division Broadcom",
+                """
+                        Initial meeting for Rod Johnson from Embabel to establish whether or not there
+                        are customer and co-marketing or product development or other business opportunities
+                        with Broadcom and Embabel.
+                        """,
                 List.of(
-                        "bob.smith@example.com")
+                        "James Watters Broadcom", "Purnima Padmanabhan Broadcom", "Ryan Morgan Broadcom")
         );
         var briefing = AgentInvocation.builder(agentPlatform)
                 .options(ProcessOptions.builder().verbosity(v -> v.showPrompts(true)).build())
