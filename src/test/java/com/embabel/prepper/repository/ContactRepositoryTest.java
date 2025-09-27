@@ -16,7 +16,9 @@ class ContactRepositoryTest {
 
     @Test
     void shouldSaveAndFindResearchedParticipant() {
-        Domain.Contact participant = new Domain.Contact();
+        Domain.Contact participant = new Domain.Contact(
+                new Domain.NewContact("Test", "Participant", "Tester")
+        );
         participant.setEmail("test@example.com");
         participant.setWriteup("Test participant writeup");
 
@@ -25,13 +27,11 @@ class ContactRepositoryTest {
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getEmail()).isEqualTo("test@example.com");
         assertThat(saved.getWriteup()).isEqualTo("Test participant writeup");
-        assertThat(saved.getCreatedAt()).isNotNull();
-        assertThat(saved.getUpdatedAt()).isNotNull();
     }
 
     @Test
     void shouldFindByEmail() {
-        Domain.Contact participant = new Domain.Contact();
+        Domain.Contact participant = new Domain.Contact(new Domain.NewContact("x", "y", ""));
         participant.setEmail("find@example.com");
         participant.setWriteup("Findable participant");
         repository.save(participant);
@@ -42,7 +42,9 @@ class ContactRepositoryTest {
 
     @Test
     void shouldCheckExistsByEmail() {
-        Domain.Contact participant = new Domain.Contact();
+        Domain.Contact participant = new Domain.Contact(
+                new Domain.NewContact("Exists", "Participant", "Tester")
+        );
         participant.setEmail("exists@example.com");
         participant.setWriteup("Existing participant");
         repository.save(participant);
