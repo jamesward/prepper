@@ -1,0 +1,16 @@
+embabel.models.default-llm=amazon.nova-pro-v1:0
+
+embabel.models.bedrock.models[18].name=amazon.nova-pro-v1:0
+embabel.models.bedrock.models[18].knowledge-cutoff=2024-04-01
+embabel.models.bedrock.models[18].input-price=3.0
+embabel.models.bedrock.models[18].output-price=15.0
+
+#embabel.models.bedrock.models[1].name=amazon.nova-lite-v1:0
+#embabel.models.bedrock.models[1].knowledge-cutoff=2024-04-01
+#embabel.models.bedrock.models[1].input-price=3.0
+#embabel.models.bedrock.models[1].output-price=15.0
+#
+#embabel.models.bedrock.models[2].name=amazon.nova-micro-v1:0
+#embabel.models.bedrock.models[2].knowledge-cutoff=2024-04-01
+#embabel.models.bedrock.models[2].input-price=3.0
+#embabel.models.bedrock.models[2].output-price=15.0

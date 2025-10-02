@@ -1,3 +1,5 @@
+#debug: true
+
 spring:
   datasource:
     url: jdbc:h2:file:./data/prepper;AUTO_SERVER=true
@@ -15,23 +17,32 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  ai:
+    mcp:
+      client:
+        sse:
+          connections:
+            brave-search-mcp:
+              url:
+                https://devoxx-brave-mcp-076c0328bd86.herokuapp.com
+  # Todo: This adds the tools but not in the web toolgroup
 
 embabel:
 
-  agent:
-    platform:
-      tools:
-        includes:
-          linked-in:
-            tools:
-              - get_person_profile
-              - get_company_profile
+#  agent:
+#    platform:
+#      tools:
+#        includes:
+#          linked-in:
+#            tools:
+#              - get_person_profile
+#              - get_company_profile
 
   models:
+    default-llm: us.amazon.nova-pro-v1:0
     llms:
-      best: gpt-4.1
-      balanced: gpt-4.1-mini
-      cheapest: gpt-4.1-nano
+      best: us.amazon.nova-pro-v1:0
+      balanced: us.amazon.nova-lite-v1:0
 
 prepper:
   researcher:
@@ -39,7 +50,7 @@ prepper:
       role: best
     tool-groups:
       - web
-      - linked-in
+#      - linked-in
     persona:
       role: Research Specialist
       goal: >

@@ -1,0 +1,120 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.ai.model.bedrock.converse.autoconfigure.BedrockConverseProxyChatAutoConfiguration
+      - org.springframework.ai.model.bedrock.cohere.autoconfigure.BedrockCohereEmbeddingAutoConfiguration
+      - org.springframework.ai.model.bedrock.titan.autoconfigure.BedrockTitanEmbeddingAutoConfiguration
+  ai:
+    bedrock:
+      aws:
+        region: ${AWS_REGION:}
+        access-key: ${AWS_ACCESS_KEY_ID:}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:}
+        session-token: ${AWS_SESSION_TOKEN:}
+
+embabel:
+  models:
+    bedrock:
+      models:
+        # US region
+        - name: us.anthropic.claude-3-5-sonnet-20240620-v1:0
+          knowledge-cutoff: 2024-04-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: us.anthropic.claude-3-5-sonnet-20241022-v2:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: us.anthropic.claude-3-5-haiku-20241022-v1:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 0.8
+          output-price: 4.0
+        - name: us.anthropic.claude-3-7-sonnet-20250219-v1:0
+          knowledge-cutoff: 2024-10-31
+          input-price: 3.0
+          output-price: 15.0
+        - name: us.anthropic.claude-sonnet-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: us.anthropic.claude-opus-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 15.0
+          output-price: 75.0
+        - name: us.amazon.nova-pro-v1:0
+          knowledge-cutoff: 2025-03-01 # todo
+          input-price: 15.0 # todo
+          output-price: 75.0 # todo
+        - name: us.amazon.nova-lite-v1:0
+          knowledge-cutoff: 2025-03-01 # todo
+          input-price: 15.0 # todo
+          output-price: 75.0 # todo
+        # EU region
+        - name: eu.anthropic.claude-3-5-sonnet-20240620-v1:0
+          knowledge-cutoff: 2024-04-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: eu.anthropic.claude-3-5-sonnet-20241022-v2:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: eu.anthropic.claude-3-5-haiku-20241022-v1:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 0.8
+          output-price: 4.0
+        - name: eu.anthropic.claude-3-7-sonnet-20250219-v1:0
+          knowledge-cutoff: 2024-10-31
+          input-price: 3.0
+          output-price: 15.0
+        - name: eu.anthropic.claude-sonnet-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: eu.anthropic.claude-opus-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 15.0
+          output-price: 75.0
+        # APAC region
+        - name: apac.anthropic.claude-3-5-sonnet-20240620-v1:0
+          knowledge-cutoff: 2024-04-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: apac.anthropic.claude-3-5-sonnet-20241022-v2:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: apac.anthropic.claude-3-5-haiku-20241022-v1:0
+          knowledge-cutoff: 2024-07-01
+          input-price: 0.8
+          output-price: 4.0
+        - name: apac.anthropic.claude-3-7-sonnet-20250219-v1:0
+          knowledge-cutoff: 2024-10-31
+          input-price: 3.0
+          output-price: 15.0
+        - name: apac.anthropic.claude-sonnet-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 3.0
+          output-price: 15.0
+        - name: apac.anthropic.claude-opus-4-20250514-v1:0
+          knowledge-cutoff: 2025-03-01
+          input-price: 15.0
+          output-price: 75.0
+#    default-llm: us.amazon.nova-pro-v1:0
+
+
+#  embabel.models.default-llm=amazon.nova-pro-v1:0
+
+#embabel.models.bedrock.models[18].name=amazon.nova-pro-v1:0
+#embabel.models.bedrock.models[18].knowledge-cutoff=2024-04-01
+#embabel.models.bedrock.models[18].input-price=3.0
+#embabel.models.bedrock.models[18].output-price=15.0
+
+#embabel.models.bedrock.models[1].name=amazon.nova-lite-v1:0
+#embabel.models.bedrock.models[1].knowledge-cutoff=2024-04-01
+#embabel.models.bedrock.models[1].input-price=3.0
+#embabel.models.bedrock.models[1].output-price=15.0
+#
+#embabel.models.bedrock.models[2].name=amazon.nova-micro-v1:0
+#embabel.models.bedrock.models[2].knowledge-cutoff=2024-04-01
+#embabel.models.bedrock.models[2].input-price=3.0
+#embabel.models.bedrock.models[2].output-price=15.0

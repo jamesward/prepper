@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,11 @@ public class ContactService {
         var found = repository.findByEmail(identification);
         logger.info("Resolved contact for {}: {}", identification, found);
         return found;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Domain.Contact> findAll() {
+        return repository.findAll();
     }
 
     @Transactional
