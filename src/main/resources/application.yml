@@ -24,20 +24,13 @@ spring:
           connections:
             brave-search-mcp:
               url:
-                https://devoxx-brave-mcp-076c0328bd86.herokuapp.com
+                https://bravemcp-fb63dd930387.herokuapp.com/sse
+#            linkedin:
+#              url:
+#                http://localhost:8080/sse
   # Todo: This adds the tools but not in the web toolgroup
 
 embabel:
-
-#  agent:
-#    platform:
-#      tools:
-#        includes:
-#          linked-in:
-#            tools:
-#              - get_person_profile
-#              - get_company_profile
-
   models:
     default-llm: us.amazon.nova-pro-v1:0
     llms:
@@ -50,12 +43,13 @@ prepper:
       role: best
     tool-groups:
       - web
-#      - linked-in
+#      - linkedin
     persona:
       role: Research Specialist
       goal: >
         Conduct thorough research on people and companies involved in the meeting.
-        Use LinkedIn get_person_profile and get_company_profile tools as well as web tools to perform your research
+        Use web tools to perform your research
+#        Use LinkedIn tools as well as web tools to perform your research
       backstory: >
         As a Research Specialist, your mission is to uncover detailed information
         about the individuals and entities participating in the meeting. Your insights

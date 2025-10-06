@@ -3,14 +3,14 @@
 ## Prerequisites
 
 1. Browser
-2. Access to your email
+1. Access to your email
 
 ## AWS Provisioning
 
 1. Visit the provided workshop URL *in a guest browser*
-2. Sign in using the *Email OTP* option
-3. Follow the instructions to authenticate to the temporary AWS account
-4. Follow the instructions for *Workshop setup*
+1. Sign in using the *Email OTP* option
+1. Follow the instructions to authenticate to the temporary AWS account
+1. Follow the instructions for *Workshop setup*
 
 ## Model Access
 
@@ -25,9 +25,13 @@
 1. In the hosted IDE's shell:
     git clone https://github.com/jamesward/prepper.git
     cd prepper
-2. Verify the Embabel shell starts:
+1. Pick Java or Kotlin
+    git checkout java
+    # or
+    git checkout kotlin
+1. Verify the Embabel shell starts:
     ./mvnw spring-boot:run
-3. Verify the models in the Embabel shell:
+1. Verify the models in the Embabel shell:
     models
 
 ## Add the domain model
@@ -37,9 +41,7 @@
 ## Add a Contact Service & Repository
 
 1. Code
-
-## Add an Embabel shell command to list contacts
-
+1. Add an Embabel shell command to list contacts
 1. Code
 2. Restart the Embabel shell
 3. Verify the new `contacts` command works (you shouldn't see any contacts yet)
