@@ -17,48 +17,21 @@ package com.embabel.prepper;
 
 import com.embabel.agent.config.annotation.EnableAgents;
 import com.embabel.agent.config.annotation.LoggingThemes;
-import com.embabel.agent.core.ToolGroup;
-import com.embabel.agent.core.ToolGroupDescription;
-import com.embabel.agent.core.ToolGroupPermission;
-import com.embabel.agent.tools.mcp.McpToolGroup;
 import com.embabel.prepper.agent.PrepperConfig;
-import io.modelcontextprotocol.client.McpSyncClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-
-import java.util.List;
-import java.util.Set;
 
 
 @SpringBootApplication
 @EnableConfigurationProperties(PrepperConfig.class)
 @EnableJpaRepositories(basePackages = "com.embabel.prepper")
 @EnableJpaAuditing
-@EnableAgents(
-        loggingTheme = LoggingThemes.SEVERANCE
-//        mcpServers = {McpServers.DOCKER}
-//        mcpServers = {McpServers.DOCKER_DESKTOP}
-)
+@EnableAgents(loggingTheme = LoggingThemes.SEVERANCE)
 class PrepperApplication {
     public static void main(String[] args) {
         SpringApplication.run(PrepperApplication.class, args);
     }
-
-    /*
-    @Bean
-    ToolGroup linkedin(List<McpSyncClient> clients) {
-       return new McpToolGroup(
-               ToolGroupDescription.create("LinkedIn Tool Group", "linkedin"),
-               "remote",
-               "linkedin",
-               Set.of(ToolGroupPermission.INTERNET_ACCESS),
-               clients,
-               tool -> tool.getToolDefinition().name().contains("linkedin")
-       );
-    }
-     */
 }

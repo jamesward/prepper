@@ -1,5 +1,3 @@
-#debug: true
-
 spring:
   datasource:
     url: jdbc:h2:file:./data/prepper;AUTO_SERVER=true
@@ -25,10 +23,6 @@ spring:
             brave-search-mcp:
               url:
                 https://bravemcp-fb63dd930387.herokuapp.com/sse
-#            linkedin:
-#              url:
-#                http://localhost:8080/sse
-  # Todo: This adds the tools but not in the web toolgroup
 
 embabel:
   models:
@@ -43,13 +37,11 @@ prepper:
       role: best
     tool-groups:
       - web
-#      - linkedin
     persona:
       role: Research Specialist
       goal: >
         Conduct thorough research on people and companies involved in the meeting.
         Use web tools to perform your research
-#        Use LinkedIn tools as well as web tools to perform your research
       backstory: >
         As a Research Specialist, your mission is to uncover detailed information
         about the individuals and entities participating in the meeting. Your insights
