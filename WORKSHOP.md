@@ -139,7 +139,7 @@ abstract class Domain {
 }
 ```
 
-1. Create `src/main/kotlin/com/embabel/prepper/agent/ResearchedParticipantRepository.kt`
+1. Create `src/main/kotlin/com/embabel/prepper/agent/ContactRepository.kt`
 
 ```
 package com.embabel.prepper.agent
@@ -149,7 +149,7 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface ResearchedParticipantRepository : JpaRepository<Domain.Contact, Long> {
+interface ContactRepository : JpaRepository<Domain.Contact, Long> {
     fun findByEmail(email: String): Optional<Domain.Contact>
     fun existsByEmail(email: String): Boolean
 }
@@ -165,7 +165,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class ContactService(private val repository: ResearchedParticipantRepository) {
+class ContactService(private val repository: ContactRepository) {
 
     private val logger = LoggerFactory.getLogger(ContactService::class.java)
 
