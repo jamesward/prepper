@@ -206,7 +206,7 @@ public abstract class Domain {
 }
 ```
 
-1. Create `src/main/java/com/embabel/prepper/agent/ResearchedParticipantRepository.java`
+1. Create `src/main/java/com/embabel/prepper/agent/ContactRepository.java`
 
 ```
 package com.embabel.prepper.agent;
@@ -217,7 +217,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ResearchedParticipantRepository extends JpaRepository<Domain.Contact, Long> {
+public interface ContactRepository extends JpaRepository<Domain.Contact, Long> {
 
     Optional<Domain.Contact> findByEmail(String email);
 
@@ -242,9 +242,9 @@ import java.util.Optional;
 public class ContactService {
 
     private final Logger logger = LoggerFactory.getLogger(ContactService.class);
-    private final ResearchedParticipantRepository repository;
+    private final ContactRepository repository;
 
-    public ContactService(ResearchedParticipantRepository repository) {
+    public ContactService(ContactRepository repository) {
         this.repository = repository;
     }
 
