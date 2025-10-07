@@ -15,24 +15,34 @@
 ## Model Access
 
 1. Follow the instructions for *Model Access* except enable these models:
-    `Amazon Nova Pro`
-    `Amazon Nova Lite`
+    ```
+    Amazon Nova Pro
+    Amazon Nova Lite
+    ```
 
-1. Now *STOP* following the instructions in the workshop and continue here.
+1. Now **STOP** following the instructions in the workshop and continue here.
 
 ## Get the starter code
 
 1. In the hosted IDE's shell:
+    ```
     git clone https://github.com/jamesward/prepper.git
     cd prepper
+    ```
 1. Pick Java or Kotlin
+    ```
     git checkout java
     # or
     git checkout kotlin
+    ```
 1. Verify the Embabel shell starts:
+    ```
     ./mvnw spring-boot:run
+    ```
 1. Verify the models in the Embabel shell:
+    ```
     models
+    ```
 
 ## Add the domain model
 
@@ -346,7 +356,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(PrepperConfig.class)
 ```
 
-1. Update `src/main/resources/application.yml`
+1. Append the following to `src/main/resources/application.yml`
 
 ```
 prepper:
