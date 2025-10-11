@@ -1,6 +1,8 @@
 #debug: true
 
 spring:
+  web:
+    locale: en
   datasource:
     url: jdbc:h2:file:./data/prepper;AUTO_SERVER=true
     driver-class-name: org.h2.Driver
@@ -23,33 +25,63 @@ spring:
         sse:
           connections:
             brave-search-mcp:
-              url:
-                https://bravemcp-fb63dd930387.herokuapp.com/sse
-#            linkedin:
-#              url:
-#                http://localhost:8080/sse
+              url: http://localhost:8080
   # Todo: This adds the tools but not in the web toolgroup
 
 embabel:
+
+#  agent:
+#    platform:
+#      tools:
+#        includes:
+#          linked-in:
+#            tools:
+#              - get_person_profile
+#              - get_company_profile
+
+
   models:
-    default-llm: us.amazon.nova-pro-v1:0
+    default-llm: Jan-v1-2509-gguf:Q8_0_32k
     llms:
-      best: us.amazon.nova-pro-v1:0
-      balanced: us.amazon.nova-lite-v1:0
+      best: qwen3:14b-fp16-32k
+      balanced: qwen3:8b-fp16-32k
+      default: Jan-v1-2509-gguf:Q8_0_32k
+
+
+  # models:
+  #   default-llm: qwen3:4b-fp16-32k
+  #   llms:
+  #     best: qwen3:14b-fp16-32k
+  #     balanced: qwen3:8b-fp16-32k
+  #     default: qwen3:4b-fp16-32k
+
+  # models:
+  #   default-llm: Jan-v1-2509-gguf:Q8_0_32k
+  #   llms:
+  #     best: Jan-v1-2509-gguf:Q8_0_32k
+  #     balanced: Jan-v1-2509-gguf:Q8_0_32k
+      # default: Jan-v1-2509-gguf:Q8_0_32k
+
+  ollama:
+    base-url: http://localhost:11434
 
 prepper:
   researcher:
     llm:
-      role: best
+      role: default
+      temperature: 0.6
+      max-tokens: 4096
+      top-p: 0.95
+      top-k: 20
+      timeout: 120s
     tool-groups:
       - web
-#      - linkedin
+#      - linked-in
     persona:
       role: Research Specialist
       goal: >
         Conduct thorough research on people and companies involved in the meeting.
-        Use web tools to perform your research
-#        Use LinkedIn tools as well as web tools to perform your research
+        Use LinkedIn get_person_profile and get_company_profile tools as well as web tools to perform your research
       backstory: >
         As a Research Specialist, your mission is to uncover detailed information
         about the individuals and entities participating in the meeting. Your insights
@@ -57,7 +89,12 @@ prepper:
 
   industry-analyzer:
     llm:
-      role: balanced
+      role: default
+      temperature: 0.6
+      max-tokens: 4096
+      top-p: 0.95
+      top-k: 20
+      timeout: 120s
     tool-groups:
       - web
     persona:
@@ -70,7 +107,12 @@ prepper:
 
   meeting-strategist:
     llm:
-      role: best
+      role: default
+      temperature: 0.6
+      max-tokens: 4096
+      top-p: 0.95
+      top-k: 20
+      timeout: 120s
     tool-groups:
       - web
     persona:
@@ -84,6 +126,11 @@ prepper:
   briefing-writer:
     llm:
       role: best
+      temperature: 0.6
+      max-tokens: 8192
+      top-p: 0.95
+      top-k: 20
+      timeout: 180s
     tool-groups:
       - web
     persona:
@@ -91,4 +138,4 @@ prepper:
       goal: Compile all gathered information into a concise, informative briefing document
       backstory: >
         As the Briefing Coordinator, your role is to consolidate the research,
-        analysis, and strategic insights
+        analysis, and strategic insights. Output only in markdown format.

@@ -32,7 +32,7 @@
 
         <dependency>
             <groupId>com.embabel.agent</groupId>
-            <artifactId>embabel-agent-starter-bedrock</artifactId>
+            <artifactId>embabel-agent-starter-ollama</artifactId>
             <version>${embabel-agent.version}</version>
         </dependency>
 
@@ -80,6 +80,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>-Duser.language=en -Duser.country=</jvmArguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
