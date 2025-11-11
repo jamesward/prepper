@@ -1,10 +1,10 @@
 package com.embabel.prepper;
 
 
-import com.embabel.agent.config.AgentPlatformConfiguration;
 import com.embabel.agent.config.models.bedrock.BedrockModels;
 import com.embabel.agent.config.models.bedrock.BedrockOptionsConverter;
 import com.embabel.agent.config.models.bedrock.EmbabelBedrockProxyChatModelBuilder;
+import com.embabel.agent.spi.config.spring.AgentPlatformConfiguration;
 import com.embabel.common.ai.model.Llm;
 import com.embabel.common.ai.model.PerTokenPricingModel;
 import io.micrometer.observation.ObservationRegistry;
