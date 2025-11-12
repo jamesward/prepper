@@ -32,7 +32,6 @@ public record PrepperAgent(
                 meeting.participants(),
                 config.maxConcurrency(),
                 participant ->
-                        // todo: currently this only resolves based on email
                         contactService.resolveContact(participant)
                                 .orElseGet(() -> {
                                     var newContact = researcher.fromPrompt(participant);

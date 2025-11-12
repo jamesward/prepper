@@ -1,5 +1,6 @@
 package com.embabel.prepper.shell;
 
+import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.api.common.autonomy.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.ProcessOptions;
@@ -9,10 +10,11 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 @ShellComponent
-record PrepperShell(AgentPlatform agentPlatform, ContactService contactService) {
+record PrepperShell(AgentPlatform agentPlatform, ContactService contactService, OperationContext embabel) {
 
     @ShellMethod("prep")
     String prep() {
@@ -80,6 +82,14 @@ record PrepperShell(AgentPlatform agentPlatform, ContactService contactService) 
         sb.append("=====================\n");
 
         return sb.toString();
+    }
+
+    @ShellMethod("findcontact")
+    Optional<Domain.Contact> findContact() {
+        var scanner = new Scanner(System.in);
+        System.out.println("Contacts query: ");
+        var identification = scanner.nextLine();
+        return contactService.resolveContact(identification);
     }
 
 }
