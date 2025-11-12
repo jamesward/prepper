@@ -1,6 +1,5 @@
 package com.embabel.prepper.shell;
 
-import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.api.common.autonomy.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.ProcessOptions;
@@ -14,7 +13,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @ShellComponent
-record PrepperShell(AgentPlatform agentPlatform, ContactService contactService, OperationContext embabel) {
+record PrepperShell(AgentPlatform agentPlatform, ContactService contactService) {
 
     @ShellMethod("prep")
     String prep() {
