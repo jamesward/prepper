@@ -1,12 +1,12 @@
 package com.embabel.prepper.agent;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface ResearchedParticipantRepository extends JpaRepository<Domain.Contact, Long> {
+public interface ContactRepository extends ListCrudRepository<Domain.Contact, Long> {
 
     Optional<Domain.Contact> findByEmail(String email);
 

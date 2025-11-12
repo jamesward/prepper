@@ -9,7 +9,6 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 @ShellComponent
@@ -68,11 +67,11 @@ record PrepperShell(AgentPlatform agentPlatform, ContactService contactService) 
         sb.append("\n=== CONTACTS LIST ===\n");
         contacts.forEach(contact -> {
             sb.append("\n")
-                    .append(contact.getName())
+                    .append(contact.name())
                     .append("\n")
-                    .append(contact.getEmail())
+                    .append(contact.email())
                     .append("\n")
-                    .append(contact.getWriteup())
+                    .append(contact.writeup())
                     .append("\n")
                     .append("\n")
                     .append("---")

@@ -2,11 +2,12 @@ package com.embabel.prepper.agent;
 
 import com.embabel.common.ai.prompt.PromptContributor;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import jakarta.persistence.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -38,78 +39,24 @@ public abstract class Domain {
     /**
      * Fleshed out participant
      */
-    @Entity
-    @EntityListeners(AuditingEntityListener.class)
-    public static class Contact implements PromptContributor {
-
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-
-        @Column(nullable = false)
-        private String name;
-
-        @Column
-        private String email;
-
-        @Column(columnDefinition = "TEXT")
-        private String writeup;
-
-        @CreatedDate
-        private LocalDateTime createdAt;
-
-        @LastModifiedDate
-        private LocalDateTime updatedAt;
-
-        protected Contact() {
-        }
+    @Table("contact")
+    public record Contact(
+            @Id Long id,
+            @Column("name") String name,
+            @Column("email") String email,
+            @Column("writeup") String writeup,
+            @CreatedDate @Column("created_at") LocalDateTime createdAt,
+            @LastModifiedDate @Column("updated_at") LocalDateTime updatedAt
+    ) implements PromptContributor {
 
         public Contact(NewContact newContact) {
-            this.name = newContact.name;
-            this.email = newContact.email;
-            this.writeup = newContact.writeup;
+            this(null, newContact.name(), newContact.email(), newContact.writeup(), null, null);
         }
 
         @NotNull
         @Override
         public String contribution() {
             return "- %s: %s".formatted(email, writeup);
-        }
-
-        public Long getId() {
-            return id;
-        }
-
-        public void setId(Long id) {
-            this.id = id;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getWriteup() {
-            return writeup;
-        }
-
-        public void setWriteup(String writeup) {
-            this.writeup = writeup;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String email() {
-            return email;
-        }
-
-        public String writeup() {
-            return writeup;
         }
 
         @Override

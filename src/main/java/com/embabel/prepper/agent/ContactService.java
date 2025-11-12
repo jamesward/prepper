@@ -12,9 +12,9 @@ import java.util.Optional;
 public class ContactService {
 
     private final Logger logger = LoggerFactory.getLogger(ContactService.class);
-    private final ResearchedParticipantRepository repository;
+    private final ContactRepository repository;
 
-    public ContactService(ResearchedParticipantRepository repository) {
+    public ContactService(ContactRepository repository) {
         this.repository = repository;
     }
 

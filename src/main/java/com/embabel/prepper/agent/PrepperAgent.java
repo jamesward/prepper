@@ -41,9 +41,9 @@ public record PrepperAgent(
                                             
                                             Do your best to populate email address.
                                             
-                                            Participant: %s
+                                            Participant:
                                             %s
-                                            """.formatted(participant, meeting.purpose()));
+                                            """.formatted(participant));
                                     return contactService.createContact(newContact);
                                 })
         );
@@ -63,7 +63,10 @@ public record PrepperAgent(
                                 Identify major trends, potential
                                 challenges, and strategic opportunities.
                                 
-                                Participants: %s
+                                Participants:
+                                %s
+                                
+                                Meeting purpose:
                                 %s
                                 """.formatted(participants.contribution(), meeting.purpose()),
                         Domain.IndustryAnalysis.class);
@@ -83,8 +86,12 @@ public record PrepperAgent(
                                 
                                 Participants: %s
                                 
-                                %s),
-                                """.formatted(participants.contribution(), meeting.purpose()),
+                                Meeting purpose:
+                                %s
+                                
+                                Industry analysis:
+                                %s
+                                """.formatted(participants.contribution(), meeting.purpose(), industryAnalysis.analysis()),
                         Domain.MeetingStrategy.class);
     }
 
@@ -103,9 +110,15 @@ public record PrepperAgent(
                         Compile all the information given into a briefing for the meeting
                         Consolidate research, analysis, and strategic insights.
                         
+                        Meeting purpose:
                         %s
-                        Participants: %s
-                        """.formatted(meeting.purpose(), participants.contribution()
+                        
+                        Participants:
+                        %s
+                        
+                        Strategy:
+                        %s
+                        """.formatted(meeting.purpose(), participants.contribution(), meetingStrategy.strategy()
                 ));
         return new Domain.Briefing(
                 meeting,
