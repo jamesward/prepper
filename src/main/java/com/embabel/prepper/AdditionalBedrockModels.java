@@ -71,9 +71,9 @@ class AdditionalBedrockModels {
                 BedrockModels.PROVIDER,
                 chatModelOf(model),
                 BedrockOptionsConverter.INSTANCE,
-                java.time.LocalDate.parse("2025-03-01"), // todo
+                java.time.LocalDate.parse("2024-05-23"),
                 new ArrayList<>(),
-                new PerTokenPricingModel(1.0, 1.0) // todo
+                new PerTokenPricingModel(0.8, 3.2)
         );
     }
 
@@ -86,9 +86,9 @@ class AdditionalBedrockModels {
                 BedrockModels.PROVIDER,
                 chatModelOf(model),
                 BedrockOptionsConverter.INSTANCE,
-                java.time.LocalDate.parse("2025-03-01"), // todo
+                java.time.LocalDate.parse("2024-05-23"),
                 new ArrayList<>(),
-                new PerTokenPricingModel(1.0, 1.0) // todo
+                new PerTokenPricingModel(0.06, 0.24)
         );
     }
 }
