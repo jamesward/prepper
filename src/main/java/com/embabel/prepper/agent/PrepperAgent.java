@@ -3,11 +3,12 @@ package com.embabel.prepper.agent;
 import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
-import com.embabel.agent.api.annotation.Export;
 import com.embabel.agent.api.common.Ai;
 import com.embabel.agent.api.common.OperationContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 
 @Agent(description = "A meeting prepper agent that helps users prepare for meetings ")
@@ -31,19 +32,10 @@ public record PrepperAgent(
                 meeting.participants(),
                 config.maxConcurrency(),
                 participant ->
+                        // todo: currently this only resolves based on email
                         contactService.resolveContact(participant)
                                 .orElseGet(() -> {
-                                    var newContact = researcher.fromPrompt("""
-                                            Conduct comprehensive research on this individual and company
-                                            involved in the upcoming meeting. Gather information on recent
-                                            news, achievements, professional background, and any relevant
-                                            business activities.
-                                            
-                                            Do your best to populate email address.
-                                            
-                                            Participant:
-                                            %s
-                                            """.formatted(participant));
+                                    var newContact = researcher.fromPrompt(participant);
                                     return contactService.createContact(newContact);
                                 })
         );
@@ -54,22 +46,8 @@ public record PrepperAgent(
     public Domain.IndustryAnalysis analyzeIndustry(Domain.Meeting meeting, Domain.Participants participants, Ai ai) {
         return config.industryAnalyzer()
                 .promptRunner(ai)
-                .createObject("""
-                                Analyze the current industry trends, challenges, and opportunities
-                                relevant to the meeting's context. Consider market reports, recent
-                                developments, and expert opinions to provide a comprehensive
-                                overview of the industry landscape.
-                                
-                                Identify major trends, potential
-                                challenges, and strategic opportunities.
-                                
-                                Participants:
-                                %s
-                                
-                                Meeting purpose:
-                                %s
-                                """.formatted(participants.contribution(), meeting.purpose()),
-                        Domain.IndustryAnalysis.class);
+                .withPromptContributors(List.of(participants, meeting))
+                .createObject("", Domain.IndustryAnalysis.class);
     }
 
     @Action
@@ -80,24 +58,12 @@ public record PrepperAgent(
             Ai ai) {
         return config.meetingStrategist()
                 .promptRunner(ai)
-                .createObject("""
-                                Develop strategic talking points, questions, and discussion angles
-                                for the meeting based on the research and industry analysis conducted
-                                
-                                Participants: %s
-                                
-                                Meeting purpose:
-                                %s
-                                
-                                Industry analysis:
-                                %s
-                                """.formatted(participants.contribution(), meeting.purpose(), industryAnalysis.analysis()),
-                        Domain.MeetingStrategy.class);
+                .withPromptContributors(List.of(participants, meeting))
+                .createObject(industryAnalysis.analysis(), Domain.MeetingStrategy.class);
     }
 
     @Action
-    @AchievesGoal(description = "Produce a briefing for the meeting",
-            export = @Export(remote = true, startingInputTypes = {Domain.Meeting.class}))
+    @AchievesGoal(description = "Produce a briefing for the meeting")
     public Domain.Briefing produceBriefing(
             Domain.Meeting meeting,
             Domain.Participants participants,
@@ -106,20 +72,8 @@ public record PrepperAgent(
             Ai ai) {
         var briefing = config.briefingWriter()
                 .promptRunner(ai)
-                .generateText("""
-                        Compile all the information given into a briefing for the meeting
-                        Consolidate research, analysis, and strategic insights.
-                        
-                        Meeting purpose:
-                        %s
-                        
-                        Participants:
-                        %s
-                        
-                        Strategy:
-                        %s
-                        """.formatted(meeting.purpose(), participants.contribution(), meetingStrategy.strategy()
-                ));
+                .withPromptContributors(List.of(participants, meeting))
+                .generateText(meetingStrategy.strategy());
         return new Domain.Briefing(
                 meeting,
                 participants,

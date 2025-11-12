@@ -21,10 +21,10 @@ public abstract class Domain {
             String objective,
             @JsonPropertyDescription("A list of participant email addresses or however else we identify them, e.g. 'Roger Daltrey The Who' or 'roger@who.com'")
             List<String> participants
-    ) {
-
+    ) implements PromptContributor {
         @NonNull
-        public String purpose() {
+        @Override
+        public String contribution() {
             return "Meeting:\nContext: %s\nObjective: %s\n".formatted(context, objective);
         }
     }
@@ -36,9 +36,6 @@ public abstract class Domain {
     ) {
     }
 
-    /**
-     * Fleshed out participant
-     */
     @Table("contact")
     public record Contact(
             @Id Long id,
@@ -72,7 +69,7 @@ public abstract class Domain {
         @NotNull
         @Override
         public String contribution() {
-            return participants.stream()
+            return "Participants:\n" + participants.stream()
                     .map(Contact::contribution)
                     .collect(java.util.stream.Collectors.joining("\n"));
         }
