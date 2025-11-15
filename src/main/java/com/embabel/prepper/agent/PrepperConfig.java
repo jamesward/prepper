@@ -7,14 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.validation.annotation.Validated;
 
-
-@ConfigurationProperties(prefix = "prepper")
 @Validated
-public record PrepperConfig(
-        @NotNull Actor<RoleGoalBackstory> researcher,
-        @NotNull Actor<RoleGoalBackstory> industryAnalyzer,
-        @NotNull Actor<RoleGoalBackstory> meetingStrategist,
-        @NotNull Actor<RoleGoalBackstory> briefingWriter,
-        @DefaultValue("8") int maxConcurrency
-) {
+@ConfigurationProperties(prefix = "prepper")
+public record PrepperConfig(@NotNull Actor<RoleGoalBackstory> researcher,
+		@NotNull Actor<RoleGoalBackstory> industryAnalyzer, @NotNull Actor<RoleGoalBackstory> meetingStrategist,
+		@NotNull Actor<RoleGoalBackstory> briefingWriter, @DefaultValue("8") int maxConcurrency) {
 }

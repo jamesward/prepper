@@ -1,6 +1,5 @@
 package com.embabel.prepper;
 
-
 import com.embabel.agent.config.models.bedrock.BedrockModels;
 import com.embabel.agent.config.models.bedrock.BedrockOptionsConverter;
 import com.embabel.agent.config.models.bedrock.EmbabelBedrockProxyChatModelBuilder;
@@ -23,72 +22,69 @@ import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 
 import java.util.ArrayList;
 
-@Configuration(proxyBeanMethods = false)
+@Configuration
 @AutoConfigureBefore(AgentPlatformConfiguration.class)
 class AdditionalBedrockModels {
 
-    private final AwsCredentialsProvider credentialsProvider;
-    private final AwsRegionProvider regionProvider;
-    private final BedrockAwsConnectionProperties connectionProperties;
-    private final ObjectProvider<ObservationRegistry> observationRegistry;
-    private final ObjectProvider<ChatModelObservationConvention> observationConvention;
-    private final ObjectProvider<BedrockRuntimeClient> bedrockRuntimeClient;
-    private final ObjectProvider<BedrockRuntimeAsyncClient> bedrockRuntimeAsyncClient;
+	private final AwsCredentialsProvider credentialsProvider;
 
-    public AdditionalBedrockModels(AwsCredentialsProvider credentialsProvider, AwsRegionProvider regionProvider, BedrockAwsConnectionProperties bedrockAwsConnectionProperties, ObjectProvider<ObservationRegistry> observationRegistry, ObjectProvider<ChatModelObservationConvention> observationConvention, ObjectProvider<BedrockRuntimeClient> bedrockRuntimeClient, ObjectProvider<BedrockRuntimeAsyncClient> bedrockRuntimeAsyncClient) {
-        this.credentialsProvider = credentialsProvider;
-        this.regionProvider = regionProvider;
-        this.connectionProperties = bedrockAwsConnectionProperties;
-        this.observationRegistry = observationRegistry;
-        this.observationConvention = observationConvention;
-        this.bedrockRuntimeClient = bedrockRuntimeClient;
-        this.bedrockRuntimeAsyncClient = bedrockRuntimeAsyncClient;
-    }
+	private final AwsRegionProvider regionProvider;
 
-    ChatModel chatModelOf(String model) {
-        var chatModel = new EmbabelBedrockProxyChatModelBuilder()
-                .credentialsProvider(credentialsProvider)
-                .region(regionProvider.getRegion())
-                .timeout(connectionProperties.getTimeout())
-                .defaultOptions(ToolCallingChatOptions.builder().model(model).build())
-                .observationRegistry(observationRegistry.getIfUnique() != null ? observationRegistry.getIfUnique() : ObservationRegistry.NOOP)
-                .bedrockRuntimeClient(bedrockRuntimeClient.getIfAvailable())
-                .bedrockRuntimeAsyncClient(bedrockRuntimeAsyncClient.getIfAvailable())
-                .build();
+	private final BedrockAwsConnectionProperties connectionProperties;
 
-        observationConvention.ifAvailable(chatModel::setObservationConvention);
+	private final ObjectProvider<ObservationRegistry> observationRegistry;
 
-        return chatModel;
-    }
+	private final ObjectProvider<ChatModelObservationConvention> observationConvention;
 
+	private final ObjectProvider<BedrockRuntimeClient> bedrockRuntimeClient;
 
-    @Bean("bedrockModel-us.amazon.nova-pro-v1:0")
-    Llm usNovaPro() {
-        var model = "us.amazon.nova-pro-v1:0";
+	private final ObjectProvider<BedrockRuntimeAsyncClient> bedrockRuntimeAsyncClient;
 
-        return new Llm(
-                model,
-                BedrockModels.PROVIDER,
-                chatModelOf(model),
-                BedrockOptionsConverter.INSTANCE,
-                java.time.LocalDate.parse("2024-05-23"),
-                new ArrayList<>(),
-                new PerTokenPricingModel(0.8, 3.2)
-        );
-    }
+	AdditionalBedrockModels(AwsCredentialsProvider credentialsProvider, AwsRegionProvider regionProvider,
+			BedrockAwsConnectionProperties bedrockAwsConnectionProperties,
+			ObjectProvider<ObservationRegistry> observationRegistry,
+			ObjectProvider<ChatModelObservationConvention> observationConvention,
+			ObjectProvider<BedrockRuntimeClient> bedrockRuntimeClient,
+			ObjectProvider<BedrockRuntimeAsyncClient> bedrockRuntimeAsyncClient) {
+		this.credentialsProvider = credentialsProvider;
+		this.regionProvider = regionProvider;
+		this.connectionProperties = bedrockAwsConnectionProperties;
+		this.observationRegistry = observationRegistry;
+		this.observationConvention = observationConvention;
+		this.bedrockRuntimeClient = bedrockRuntimeClient;
+		this.bedrockRuntimeAsyncClient = bedrockRuntimeAsyncClient;
+	}
 
-    @Bean("bedrockModel-us.amazon.nova-lite-v1:0")
-    Llm usNovaLite() {
-        var model = "us.amazon.nova-lite-v1:0";
+	@Bean("bedrockModel-us.amazon.nova-pro-v1:0")
+	Llm usNovaPro() {
+		var model = "us.amazon.nova-pro-v1:0";
 
-        return new Llm(
-                model,
-                BedrockModels.PROVIDER,
-                chatModelOf(model),
-                BedrockOptionsConverter.INSTANCE,
-                java.time.LocalDate.parse("2024-05-23"),
-                new ArrayList<>(),
-                new PerTokenPricingModel(0.06, 0.24)
-        );
-    }
+		return new Llm(model, BedrockModels.PROVIDER, chatModelOf(model), BedrockOptionsConverter.INSTANCE,
+				java.time.LocalDate.parse("2024-05-23"), new ArrayList<>(), new PerTokenPricingModel(0.8, 3.2));
+	}
+
+	@Bean("bedrockModel-us.amazon.nova-lite-v1:0")
+	Llm usNovaLite() {
+		var model = "us.amazon.nova-lite-v1:0";
+
+		return new Llm(model, BedrockModels.PROVIDER, chatModelOf(model), BedrockOptionsConverter.INSTANCE,
+				java.time.LocalDate.parse("2024-05-23"), new ArrayList<>(), new PerTokenPricingModel(0.06, 0.24));
+	}
+
+	private ChatModel chatModelOf(String model) {
+		var chatModel = new EmbabelBedrockProxyChatModelBuilder().credentialsProvider(credentialsProvider)
+			.region(regionProvider.getRegion())
+			.timeout(connectionProperties.getTimeout())
+			.defaultOptions(ToolCallingChatOptions.builder().model(model).build())
+			.observationRegistry(observationRegistry.getIfUnique() != null ? observationRegistry.getIfUnique()
+					: ObservationRegistry.NOOP)
+			.bedrockRuntimeClient(bedrockRuntimeClient.getIfAvailable())
+			.bedrockRuntimeAsyncClient(bedrockRuntimeAsyncClient.getIfAvailable())
+			.build();
+
+		observationConvention.ifAvailable(chatModel::setObservationConvention);
+
+		return chatModel;
+	}
+
 }

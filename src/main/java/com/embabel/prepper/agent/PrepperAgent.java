@@ -10,75 +10,59 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-
+@SuppressWarnings("unused")
 @Agent(description = "A meeting prepper agent that helps users prepare for meetings ")
-public record PrepperAgent(
-        PrepperConfig config,
-        ContactService contactService
-) {
+class PrepperAgent {
 
-    private final static Logger logger = LoggerFactory.getLogger(PrepperAgent.class);
+	private final PrepperConfig config;
 
-    public PrepperAgent {
-        logger.info("Initialized PrepperAgent with config: {}", config);
-    }
+	private final ContactService contactService;
 
-    @Action
-    public Domain.Participants researchParticipants(Domain.Meeting meeting, OperationContext embabel) {
-        var researcher = config.researcher()
-                .promptRunner(embabel)
-                .creating(Domain.NewContact.class);
-        var contacts = embabel.parallelMap(
-                meeting.participants(),
-                config.maxConcurrency(),
-                participant ->
-                        contactService.resolveContact(participant)
-                                .orElseGet(() -> {
-                                    var newContact = researcher.fromPrompt(participant);
-                                    return contactService.createContact(newContact);
-                                })
-        );
-        return new Domain.Participants(contacts);
-    }
+	private final static Logger logger = LoggerFactory.getLogger(PrepperAgent.class);
 
-    @Action
-    public Domain.IndustryAnalysis analyzeIndustry(Domain.Meeting meeting, Domain.Participants participants, Ai ai) {
-        return config.industryAnalyzer()
-                .promptRunner(ai)
-                .withPromptContributors(List.of(participants, meeting))
-                .createObject("", Domain.IndustryAnalysis.class);
-    }
+	PrepperAgent(PrepperConfig config, ContactService contactService) {
+		this.config = config;
+		this.contactService = contactService;
+		logger.info("Initialized PrepperAgent with config: {}", config);
+	}
 
-    @Action
-    public Domain.MeetingStrategy formulateMeetingStrategy(
-            Domain.Meeting meeting,
-            Domain.Participants participants,
-            Domain.IndustryAnalysis industryAnalysis,
-            Ai ai) {
-        return config.meetingStrategist()
-                .promptRunner(ai)
-                .withPromptContributors(List.of(participants, meeting))
-                .createObject(industryAnalysis.analysis(), Domain.MeetingStrategy.class);
-    }
+	@Action
+	Domain.Participants researchParticipants(Domain.Meeting meeting, OperationContext embabel) {
+		var researcher = config.researcher().promptRunner(embabel).creating(Domain.NewContact.class);
+		var contacts = embabel.parallelMap(meeting.participants(), config.maxConcurrency(),
+				participant -> contactService.resolveContact(participant).orElseGet(() -> {
+					var newContact = researcher.fromPrompt(participant);
+					return contactService.createContact(newContact);
+				}));
+		return new Domain.Participants(contacts);
+	}
 
-    @Action
-    @AchievesGoal(description = "Produce a briefing for the meeting")
-    public Domain.Briefing produceBriefing(
-            Domain.Meeting meeting,
-            Domain.Participants participants,
-            Domain.IndustryAnalysis industryAnalysis,
-            Domain.MeetingStrategy meetingStrategy,
-            Ai ai) {
-        var briefing = config.briefingWriter()
-                .promptRunner(ai)
-                .withPromptContributors(List.of(participants, meeting))
-                .generateText(meetingStrategy.strategy());
-        return new Domain.Briefing(
-                meeting,
-                participants,
-                industryAnalysis,
-                meetingStrategy,
-                briefing
-        );
-    }
+	@Action
+	Domain.IndustryAnalysis analyzeIndustry(Domain.Meeting meeting, Domain.Participants participants, Ai ai) {
+		return config.industryAnalyzer()
+			.promptRunner(ai)
+			.withPromptContributors(List.of(participants, meeting))
+			.createObject("", Domain.IndustryAnalysis.class);
+	}
+
+	@Action
+	Domain.MeetingStrategy formulateMeetingStrategy(Domain.Meeting meeting, Domain.Participants participants,
+			Domain.IndustryAnalysis industryAnalysis, Ai ai) {
+		return config.meetingStrategist()
+			.promptRunner(ai)
+			.withPromptContributors(List.of(participants, meeting))
+			.createObject(industryAnalysis.analysis(), Domain.MeetingStrategy.class);
+	}
+
+	@Action
+	@AchievesGoal(description = "Produce a briefing for the meeting")
+	Domain.Briefing produceBriefing(Domain.Meeting meeting, Domain.Participants participants,
+			Domain.IndustryAnalysis industryAnalysis, Domain.MeetingStrategy meetingStrategy, Ai ai) {
+		var briefing = config.briefingWriter()
+			.promptRunner(ai)
+			.withPromptContributors(List.of(participants, meeting))
+			.generateText(meetingStrategy.strategy());
+		return new Domain.Briefing(meeting, participants, industryAnalysis, meetingStrategy, briefing);
+	}
+
 }

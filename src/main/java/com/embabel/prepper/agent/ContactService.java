@@ -14,36 +14,39 @@ import java.util.Optional;
 @Service
 public class ContactService {
 
-    private final Logger logger = LoggerFactory.getLogger(ContactService.class);
-    private final ContactRepository repository;
-    private final VectorStore vectorStore;
+	private final Logger logger = LoggerFactory.getLogger(ContactService.class);
 
-    public ContactService(ContactRepository repository, VectorStore vectorStore) {
-        this.repository = repository;
-        this.vectorStore = vectorStore;
-    }
+	private final ContactRepository repository;
 
-    @Transactional(readOnly = true)
-    public Optional<Domain.Contact> resolveContact(String identification) {
-        var found = vectorStore.similaritySearch(identification)
-                .stream()
-                .findFirst()
-                .flatMap(document -> repository.findById((Long) document.getMetadata().get("id")));
-        logger.info("Resolved contact for {}: {}", identification, found);
-        return found;
-    }
+	private final VectorStore vectorStore;
 
-    @Transactional(readOnly = true)
-    public List<Domain.Contact> findAll() {
-        return repository.findAll();
-    }
+	public ContactService(ContactRepository repository, VectorStore vectorStore) {
+		this.repository = repository;
+		this.vectorStore = vectorStore;
+	}
 
-    @Transactional
-    public Domain.Contact createContact(Domain.NewContact newContact) {
-        var saved = repository.save(new Domain.Contact(newContact));
-        logger.info("Created new contact: {}", saved);
-        var contactDocument = new Document("%s <%s>".formatted(saved.name(), saved.email()), Map.of("id", saved.id()));
-        vectorStore.add(List.of(contactDocument));
-        return saved;
-    }
+	@Transactional(readOnly = true)
+	public Optional<Domain.Contact> resolveContact(String identification) {
+		var found = vectorStore.similaritySearch(identification)
+			.stream()
+			.findFirst()
+			.flatMap(document -> repository.findById((Long) document.getMetadata().get("id")));
+		logger.info("Resolved contact for {}: {}", identification, found);
+		return found;
+	}
+
+	@Transactional(readOnly = true)
+	public List<Domain.Contact> findAll() {
+		return repository.findAll();
+	}
+
+	@Transactional
+	public Domain.Contact createContact(Domain.NewContact newContact) {
+		var saved = repository.save(new Domain.Contact(newContact));
+		logger.info("Created new contact: {}", saved);
+		var contactDocument = new Document("%s <%s>".formatted(saved.name(), saved.email()), Map.of("id", saved.id()));
+		vectorStore.add(List.of(contactDocument));
+		return saved;
+	}
+
 }
