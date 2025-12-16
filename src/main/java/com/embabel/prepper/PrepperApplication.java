@@ -40,9 +40,9 @@ class PrepperApplication {
 @Configuration
 class AdditionalBedrockModels {
 
-    @Bean
-    BedrockModelLoader bedrockModels() {
-        return new BedrockModelLoader(new DefaultResourceLoader(), "classpath:models/additional-bedrock.yaml");
-    }
+	@Bean
+	BedrockModelLoader bedrockModels() {
+		return new BedrockModelLoader(new DefaultResourceLoader(), "classpath:models/additional-bedrock.yaml");
+	}
 
 }
