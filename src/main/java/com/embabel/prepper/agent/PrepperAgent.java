@@ -42,7 +42,7 @@ class PrepperAgent {
 		return config.industryAnalyzer()
 			.promptRunner(ai)
 			.withPromptContributors(List.of(participants, meeting))
-			.createObject("", Domain.IndustryAnalysis.class);
+			.createObject("create the industry analysis", Domain.IndustryAnalysis.class);
 	}
 
 	@Action

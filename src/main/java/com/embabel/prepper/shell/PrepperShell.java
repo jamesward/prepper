@@ -1,8 +1,9 @@
 package com.embabel.prepper.shell;
 
-import com.embabel.agent.api.common.autonomy.AgentInvocation;
+import com.embabel.agent.api.invocation.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.ProcessOptions;
+import com.embabel.agent.core.Verbosity;
 import com.embabel.prepper.agent.ContactService;
 import com.embabel.prepper.agent.Domain;
 import org.springframework.shell.standard.ShellComponent;
@@ -54,7 +55,7 @@ record PrepperShell(AgentPlatform agentPlatform, ContactService contactService) 
 
 		var meeting = new Domain.Meeting(context, objective, participants);
 		var briefing = AgentInvocation.builder(agentPlatform)
-			.options(ProcessOptions.builder().verbosity(v -> v.showPrompts(true)).build())
+			.options(ProcessOptions.DEFAULT.withVerbosity(Verbosity.DEFAULT.showPrompts()))
 			.build(Domain.Briefing.class)
 			.invoke(meeting);
 		return briefing.briefing();
