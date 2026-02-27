@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+		<embabel-agent.version>0.3.4</embabel-agent.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,6 +41,25 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.embabel.agent</groupId>
+			<artifactId>embabel-agent-starter</artifactId>
+			<version>${embabel-agent.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.embabel.agent</groupId>
+			<artifactId>embabel-agent-starter-bedrock</artifactId>
+			<version>${embabel-agent.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.embabel.agent</groupId>
+			<artifactId>embabel-agent-starter-shell</artifactId>
+			<version>${embabel-agent.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
